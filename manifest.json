@@ -1,0 +1,10 @@
+{
+    "name": "NFA to DFA Convertor",
+    "description": "Convert a Non-Finite Automata to Definate Finite Automata",
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions":["storage"],
+    "action":{
+        "default_popup":"popup.html"
+    }
+}
