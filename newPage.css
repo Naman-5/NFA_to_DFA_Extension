@@ -1,0 +1,13 @@
+html{
+    min-width: 800px;
+    min-height: 500px;
+}
+body{
+    background: black;
+}
+#container{
+    background: #1e2761;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 10px;
+}

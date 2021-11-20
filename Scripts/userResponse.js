@@ -7,18 +7,33 @@ class Verify{
             let allStates = sessionStorage.getItem("allStates").split(",");
             let initial_states = sessionStorage.getItem('initialStates').split(',');
             let final_states = sessionStorage.getItem('finalStates').split(',');
-            
+
+            let eliminate = [...initial_states, ...final_states];
+            let filteredArray = [];
+            for(var i=0;i<noOfStates;i++){
+                let current = allStates[i];
+                let found = false;
+                for(var j=0;j<eliminate.length;j++){
+                    if(current==eliminate[j]){
+                        found=true;
+                        break;
+                    }
+                }
+                if(!found){
+                    filteredArray.push(current);
+                }
+            }
+            sessionStorage.setItem("otherStates",filteredArray);
             // verifying response correctness
             if (noOfStates != allStates.length) {
                 alert("Kindly check the values and enter again");
             }
-            else if ((initial_states.length+final_states.length)!= noOfStates) {
+            else if ((initial_states.length+final_states.length+filteredArray.length)!= noOfStates) {
               alert("Kindly check the values and enter again");
             }
             else {
             alert("Input Saved");
             response = true;
-            // window.location.replace('../newPage.html');
           }
         } catch (err) {
           alert("Kindly fill all the input boxes");
@@ -33,6 +48,7 @@ class Response{
         alert("hi");
     }
     initialResponseForm(){
+        sessionStorage.clear();
         let inputSection = document.getElementById("user-input");
         let form = document.createElement("form");
 
@@ -40,6 +56,7 @@ class Response{
         let statesp = document.createElement("p");
         let statesText = document.createElement("h4");
         statesText.style.marginLeft = "2%";
+        statesText.style.fontSize = "14.5px";
         statesText.appendChild(document.createTextNode("The number of states in the NFA? "));
         let states = document.createElement("input");
         states.type = "number";
@@ -53,6 +70,7 @@ class Response{
         let statesNameText = document.createElement("h4");
         statesNameText.style.marginLeft = "2%";
         statesNameText.appendChild(document.createTextNode("Enter the names for all the states (seperated by ,) :"));
+        statesNameText.style.fontSize = "14.5px";
         let stateNames = document.createElement("input");
         stateNames.type = "text";
         stateNames.style.color = "white";
@@ -64,6 +82,7 @@ class Response{
         let initialStatesText = document.createElement("h4");
         initialStatesText.style.marginLeft = "2%";
         initialStatesText.appendChild(document.createTextNode("Enter the names of the initial state (seperated by ,) :"));
+        initialStatesText.style.fontSize = "14.5px";
         let initialStates = document.createElement("input");
         initialStates.style.color = "white";
         initialStatesp.appendChild(initialStatesText);
@@ -74,6 +93,7 @@ class Response{
         let finalStatesText = document.createElement("h4");
         finalStatesText.style.marginLeft = "2%";
         finalStatesText.appendChild(document.createTextNode("Enter the names of the final state (seperated by ,) :"));
+        finalStatesText.style.fontSize = "14.5px";
         let finalStates = document.createElement("input");
         finalStates.style.color = "white";
         finalStatesp.appendChild(finalStatesText);
@@ -84,6 +104,7 @@ class Response{
         let inputText = document.createElement("h4");
         inputText.style.marginLeft = "2%";
         inputText.appendChild(document.createTextNode("Enter the input symbols (seperated by ,) :"));
+        inputText.style.fontSize = "14.5px";
         let inputSymbols = document.createElement("input");
         inputSymbols.style.color = "white";
         inputp.appendChild(inputText);
@@ -100,8 +121,8 @@ class Response{
             sessionStorage.setItem("noOfStates", states.value);
             sessionStorage.setItem("allStates", stateNames.value);
             sessionStorage.setItem("initialStates", initialStates.value);
-            sessionStorage.setItem("finalStates", states.value);
-            sessionStorage.setItem("inputSymbols", states.value);
+            sessionStorage.setItem("finalStates", finalStates.value);
+            sessionStorage.setItem("inputSymbols", inputSymbols.value);
 
             //verifying inputs
             let response  = Verify.verifyResponse();
