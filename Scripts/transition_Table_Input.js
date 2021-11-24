@@ -1,6 +1,25 @@
-class GetTable{
-    static getTable(){
+class DFA{
+    constructor(allStates,initial_state,final_state,input_symbols){
+        this.allStates = allStates.split(",");
+        this.refrence = allStates.split(",");
+        this.initial_state = initial_state;
+        this.final_state = final_state.split(",");
+        this.input_symbols = input_symbols.split(",");
+        this.transition_table = {};
+        this.done = [];
+        this.new = [];
+    }
+
+    getTable(){
         let tableSection = document.getElementById("table-input");
+        for(var i in this.allStates){
+            rule = {};
+            for(var j in this.input_symbols){
+                message = "Enter the next state for "+this.allStates[i]+" when the input symbol is "+this.input_symbols[j]+": ";
+                // continue from here
+                // get the transition table data from user
+            }
+        }
     }
 }
 
@@ -29,6 +48,13 @@ class DisplaySaved{
             para.appendChild(document.createElement('br'));
         }
         display_section.appendChild(para);
+        let dfa = new DFA(
+            sessionStorage.getItem("allStates"), // all states
+            sessionStorage.getItem('initialStates'), // initial state
+            sessionStorage.getItem('finalStates'), // final states
+            sessionStorage.getItem('inputSymbols') // input symbols
+        );
+        dfa.getTable();
     }
 }
 
