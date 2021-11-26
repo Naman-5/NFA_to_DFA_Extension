@@ -1,3 +1,4 @@
+var finalTable;
 class DFA{
     constructor(allStates,initial_state,final_state,input_symbols){
         this.allStates = allStates.split(",");
@@ -10,16 +11,68 @@ class DFA{
         this.new = [];
     }
 
+    setTable(){
+        this.transition_table = finalTable;
+        console.log("table set");
+        console.log(this.transition_table);
+    }
+
+    computeTransition(state,type){
+        
+    }
+
+    computeDFA(){
+        let tableSection = document.getElementById("table-input");
+        console.log("table");
+        console.log(this.transition_table[this.allStates[0]]);
+    }
     getTable(){
         let tableSection = document.getElementById("table-input");
         for(var i in this.allStates){
-            rule = {};
+            let rule = {};
             for(var j in this.input_symbols){
-                message = "Enter the next state for "+this.allStates[i]+" when the input symbol is "+this.input_symbols[j]+": ";
-                // continue from here
-                // get the transition table data from user
+                let message = "Enter the next state for "+this.allStates[i]+" when the input symbol is "+this.input_symbols[j]+": ";
+                let transition = document.createElement('div');
+                transition.style.marginLeft = '5%';
+                let question = document.createElement('p');
+                question.appendChild(document.createTextNode(message));
+                question.style.color = "White";
+                let input_transition = document.createElement('input');
+                input_transition.placeholder = this.input_symbols[j];
+                let done = document.createElement("button");
+                done.appendChild(document.createTextNode("Save"));
+                done.onclick = function(){
+                    if(input_transition.value.trim()!=""){
+                        rule[input_transition.placeholder] = input_transition.value;
+                        transition.remove();
+                    }
+                }
+                transition.appendChild(question);
+                transition.appendChild(input_transition);
+                transition.appendChild(done);
+                tableSection.appendChild(transition);
+
             }
+            this.transition_table[this.allStates[i]] = rule;
         }
+        let computeButton = document.createElement('button');
+        computeButton.append(document.createTextNode("Compute DFA"));
+        computeButton.style.marginLeft = '42%';
+        computeButton.onclick = function(){
+            let dfa = new DFA(
+                sessionStorage.getItem("allStates"), // all states
+                sessionStorage.getItem('initialStates'), // initial state
+                sessionStorage.getItem('finalStates'), // final states
+                sessionStorage.getItem('inputSymbols') // input symbols
+            )
+            // the set table function uses the global variable finalTable
+            // and sets the value for the class.
+            dfa.setTable();
+            // the computeDFA then further processes the input
+            dfa.computeDFA();
+        }
+        tableSection.appendChild(computeButton);
+        finalTable = this.transition_table;
     }
 }
 
