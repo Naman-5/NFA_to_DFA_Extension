@@ -9,22 +9,89 @@ class DFA{
         this.transition_table = {};
         this.done = [];
         this.new = [];
+        this.outputPara;
     }
 
+    static deleteFromArray(arr,element){
+        for(var i in arr){
+            if(arr[i]===element)arr.splice(i,1);
+        }
+        return arr;
+    }
     setTable(){
         this.transition_table = finalTable;
         console.log("table set");
         console.log(this.transition_table);
+        this.outputPara = document.createElement('p');
     }
 
     computeTransition(state,type){
-        
+        this.outputPara.appendChild(document.createTextNode("For state: "+state));
+        this.outputPara.appendChild(document.createElement("br"));
+
+        if(type=="i"){
+            for(var i in this.input_symbols){
+                let val = this.transition_table[state][this.input_symbols[i]];
+                this.outputPara.appendChild(document.createTextNode("For input Symbol "+this.input_symbols[i]+": "+val));
+                this.outputPara.appendChild(document.createElement('br'));
+                if(! this.refrence.includes(val)) this.new.push(val);
+                this.done.push(state);
+                this.allStates = DFA.deleteFromArray(this.allStates,state);
+            }
+        }
+        else{
+            for(var i in this.input_symbols){
+                try{
+                    let val = this.transition_table[state][this.input_symbols[i]];
+                    this.outputPara.appendChild(document.createTextNode("For input Symbol "+this.input_symbols[i]+": "+val));
+                    this.outputPara.appendChild(document.createElement('br'));
+
+                    if(this.allStates.includes(state)) this.allStates.remove(state);
+                    else if(this.new.includes(state)) this.new.remove(state);
+                    this.done = DFA.deleteFromArray(this.done,state);
+                }
+                catch(err){
+                    let val = state;
+                    let calculate_val = "";
+                    let checkPlaces = val.split(";");
+                    for(var j in checkPlaces){
+                        if(checkPlaces[j]=="") checkPlaces = DFA.deleteFromArray(checkPlaces,checkPlaces[j]);
+                    }
+                    for(var j in checkPlaces){
+                        let addingVal = this.transition_table[checkPlaces[j]][this.input_symbols[i]];
+                        if(addingVal!="-") calculate_val += this.transition_table[checkPlaces[j]][this.input_symbols[i]]+";";
+                    }
+                    this.outputPara.appendChild(document.createTextNode("For input Symbol "+this.input_symbols[i]+": "+calculate_val));
+                    this.outputPara.appendChild(document.createElement('br'));
+                    if(this.allStates.includes(state)) this.allStates = DFA.deleteFromArray(this.allStates,state);
+                    else if(this.new.includes(state)) this.new = DFA.deleteFromArray(this.new,state);
+                    this.done.push(state);
+                    if(! this.done.includes(calculate_val)) this.new.push(calculate_val);
+                }
+            }
+        }
     }
 
     computeDFA(){
         let tableSection = document.getElementById("table-input");
-        console.log("table");
-        console.log(this.transition_table[this.allStates[0]]);
+        this.outputPara.appendChild(document.createTextNode("-----RESULT-----"));
+        this.outputPara.appendChild(document.createElement("br"));
+        // starting with the initial state and then moving to other
+        // states as necessary (using elements in the done and new lists)
+        this.computeTransition(this.initial_state,"i");
+        while(this.new.length>0 || this.allStates.length>0){
+            if(this.new.length >0 ){
+                if(this.new[0] in this.done)this.new.remove(this.new[0]);
+                else this.computeTransition(this.new[0],"ni");
+            }
+            else if(this.allStates.length > 0){
+                if(this.allStates[0] in this.done) this.allStates.remove(this.allStates[0]);
+                else   this.computeTransition(this.allStates[0],"ni");
+            }
+        }
+        this.outputPara.style.color = "white";
+        this.outputPara.style.marginLeft = "5%";
+        tableSection.appendChild(this.outputPara);
     }
     getTable(){
         let tableSection = document.getElementById("table-input");
