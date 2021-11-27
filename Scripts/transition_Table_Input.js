@@ -64,15 +64,17 @@ class DFA{
                         if(checkPlaces[j]=="") checkPlaces = DFA.deleteFromArray(checkPlaces,checkPlaces[j]);
                     }
                     for(var k=0; k<checkPlaces.length;k++){
-                    //    try{
+                        try{
                         let addingVal = this.transition_table[checkPlaces[k]][this.input_symbols[i]];
                         if(addingVal!="-" && !(calculate_val.includes(addingVal))){ // just make it &&(s1.include(s2) && s2.include(s1))
                             // repeated looping issue (fix here)
                             if(addingVal.includes(calculate_val)){
-                                calculate_val = addingVal;
+                                calculate_val = addingVal+";";
                             }
                             else calculate_val += this.transition_table[checkPlaces[k]][this.input_symbols[i]]+";"};
-                    //    }catch(err){}
+                       }catch(err){
+                           alert("Incorrect Input Parameter");
+                       }
                     }
 
                     // removing the extra semi-colon from the end
