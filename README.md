@@ -1,5 +1,8 @@
 # NFA_to_DFA_Extension 
-<img src="imageAssets/logo.png" width="100" style="border-radius:50%;"/>
+<img src="imageAssets/logo.png" style="border-radius:50%;display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;"/>
 
 ## Project Description
 The project NFA_to_DFA_Extension is a chrome extension that computes the respective DFA (Deterministic finite automaton) for an NFA (Nondeterministic finite automaton). The extension requires the transition table of the NFA and then returns the transition table for the DFA.
