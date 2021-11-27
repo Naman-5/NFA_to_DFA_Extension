@@ -6,5 +6,8 @@
     "permissions":["storage"],
     "action":{
         "default_popup":"popup.html"
-    }
+    },
+    "icons": { "16": "imageAssets/logo.png",
+        "48": "imageAssets/logo.png",
+       "128": "imageAssets/logo.png" }
 }
