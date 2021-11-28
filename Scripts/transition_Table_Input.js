@@ -1,6 +1,7 @@
-var finalTable;
+var finalTable; // global variable used to set the transition table in the DFA class
 class DFA{
     constructor(allStates,initial_state,final_state,input_symbols){
+        // these variables are used throughout the conversion logic
         this.allStates = allStates.split(",");
         this.refrence = allStates.split(",");
         this.initial_state = initial_state;
@@ -18,15 +19,18 @@ class DFA{
         }
         return arr;
     }
+
+    // the setTable function, gets the value from the global variable (finalTable)
+    // the function also initialises the outputPara UI element 
     setTable(){
         this.transition_table = finalTable;
-        // console.log("table set");
-        // console.log(this.transition_table);
         this.outputPara = document.createElement('p');
     }
 
+    // Computes the individual row of the tranisiton table
     computeTransition(state,type){
-        console.log(state);
+        // empty states are not required and cause problem with the computation
+        // and therefore are dropped. 
         if(state=="" || state=="-"){
             this.allStates = DFA.deleteFromArray(this.allStates,"");
             this.new = DFA.deleteFromArray(this.new,state);
@@ -35,6 +39,8 @@ class DFA{
         this.outputPara.appendChild(document.createTextNode("For state: "+state));
         this.outputPara.appendChild(document.createElement("br"));
 
+        // The conversion computation begins from the initial state and therefore
+        // initial state has a type -> i and has seperate logic from non-initial states
         if(type=="i"){
             for(var i in this.input_symbols){
                 let val = this.transition_table[state][this.input_symbols[i]];
@@ -46,6 +52,7 @@ class DFA{
             }
         }
         else{
+            // states with type ni (non-initial) are processed in the else flow control statement.
             for(var i in this.input_symbols){
                 try{
                     let val = this.transition_table[state][this.input_symbols[i]];
@@ -66,7 +73,7 @@ class DFA{
                     for(var k=0; k<checkPlaces.length;k++){
                         try{
                         let addingVal = this.transition_table[checkPlaces[k]][this.input_symbols[i]];
-                        if(addingVal!="-" && !(calculate_val.includes(addingVal))){ // just make it &&(s1.include(s2) && s2.include(s1))
+                        if(addingVal!="-" && !(calculate_val.includes(addingVal))){ 
                             // repeated looping issue (fix here)
                             if(addingVal.includes(calculate_val)){
                                 calculate_val = addingVal+";";
@@ -81,6 +88,7 @@ class DFA{
                     if(calculate_val[calculate_val.length - 1]===';'){
                         calculate_val = calculate_val.slice(0, -1); 
                     }
+                    // once the computation is done, the result for the particular transition row is printed.
                     this.outputPara.appendChild(document.createTextNode("For input Symbol "+this.input_symbols[i]+": "+calculate_val));
                     this.outputPara.appendChild(document.createElement('br'));
                     if(this.allStates.includes(state)) this.allStates = DFA.deleteFromArray(this.allStates,state);
@@ -93,6 +101,8 @@ class DFA{
     }
 
     computeDFA(){
+        // the computeDFA function uses a while loop to traverse through all the states 
+        // the while loop calls the computeTransition function until all the states have been processed
         let tableSection = document.getElementById("table-input");
         this.outputPara.appendChild(document.createTextNode("----------RESULT----------"));
         this.outputPara.appendChild(document.createElement("br"));
@@ -101,15 +111,19 @@ class DFA{
         // states as necessary (using elements in the done and new lists)
         this.computeTransition(this.initial_state,"i");
         while(this.new.length>0 || this.allStates.length>0){
+            // the new list contains names of the states that are newly formed and were no a part of the NFA
             if(this.new.length >0 ){
                 if(this.done.includes(this.new[0])) this.new = DFA.deleteFromArray(this.new,this.new[0]);
                 else this.computeTransition(this.new[0],"ni");
             }
+            // the remaining states are processed
             else if(this.allStates.length > 0){
                 if(this.done.includes(this.allStates[0] )) this.allStates = DFA.deleteFromArray(this.allStates,this.allStates[0]); 
                 else   this.computeTransition(this.allStates[0],"ni");
             }
         }
+
+        // once the computation is done the output para is appended to the UI for the user
         this.outputPara.style.color = "white";
         this.outputPara.style.marginLeft = "5%";
         this.outputPara.style.fontStyle = 'italic';
@@ -122,6 +136,7 @@ class DFA{
         disclaimer.appendChild(document.createTextNode(disclaimerMessage));
         tableSection.appendChild(disclaimer);
     }
+    // the getTable function creates the required input boxes for the user to save his responses.
     getTable(){
         let tableSection = document.getElementById("table-input");
         for(var i in this.allStates){

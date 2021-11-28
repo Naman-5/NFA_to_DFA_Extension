@@ -12,7 +12,7 @@ The project NFA_to_DFA_Extension is a chrome extension that computes the respect
 
 - HTML -> Provides Structure to the User Interface.
 - CSS -> Add Style to the User Interface
-- JavaScript -> Used to implemement coversion logic and other functionalities.
+- JavaScript -> Used to implemement conversion logic and other functionalities.
 
 ## Steps for Installation
 > 1. Clone the Repository.
