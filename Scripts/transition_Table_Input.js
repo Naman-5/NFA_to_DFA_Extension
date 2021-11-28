@@ -94,8 +94,9 @@ class DFA{
 
     computeDFA(){
         let tableSection = document.getElementById("table-input");
-        this.outputPara.appendChild(document.createTextNode("-----RESULT-----"));
+        this.outputPara.appendChild(document.createTextNode("----------RESULT----------"));
         this.outputPara.appendChild(document.createElement("br"));
+        this.outputPara.appendChild(document.createElement('br'));
         // starting with the initial state and then moving to other
         // states as necessary (using elements in the done and new lists)
         this.computeTransition(this.initial_state,"i");
@@ -111,7 +112,15 @@ class DFA{
         }
         this.outputPara.style.color = "white";
         this.outputPara.style.marginLeft = "5%";
+        this.outputPara.style.fontStyle = 'italic';
+        this.outputPara.style.fontSize = '14px';
         tableSection.appendChild(this.outputPara);
+        let disclaimerMessage = "All states conataining final state will also be final. Kindly remove the ';' from the output DFA transition table when drawing the diagram for the DFA";
+        let disclaimer = document.createElement('p');
+        disclaimer.style.color = 'white';
+        disclaimer.style.marginLeft = "5%";
+        disclaimer.appendChild(document.createTextNode(disclaimerMessage));
+        tableSection.appendChild(disclaimer);
     }
     getTable(){
         let tableSection = document.getElementById("table-input");
@@ -145,6 +154,9 @@ class DFA{
         let computeButton = document.createElement('button');
         computeButton.append(document.createTextNode("Compute DFA"));
         computeButton.style.marginLeft = '42%';
+        computeButton.style.background = '#32CD32';
+        computeButton.style.color = 'white';
+        computeButton.style.borderRadius = '10px';
         computeButton.onclick = function(){
             let dfa = new DFA(
                 sessionStorage.getItem("allStates"), // all states
@@ -183,6 +195,7 @@ class DisplaySaved{
         // a new para element is created and all the values are then added to the para
         let para = document.createElement('p');
         para.style.marginLeft = '5%';
+        para.style.fontSize ='14px';
         para.style.color = "white";
         for(let i in display_stats){
             para.appendChild(document.createTextNode(display_stats[i]));
